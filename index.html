@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>css 3d animation</title>
     <link rel="stylesheet" href="./style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div class="frame">
+    <div class="frame" id="game_frame">
         <div class="inner_frame">
             <div class="obj1">
                 <h1 class="text">J</h1>
@@ -26,7 +27,7 @@
         </div>
     </div>
 
-    <div class="tv">
+    <!-- <div class="tv">
         <div class="player_card">
             <div class="field">
                 <img src="./images/field.jpg" alt="">
@@ -38,7 +39,146 @@
                 <img src="./images/football.png" alt="">
             </div>
         </div>
-    </div>
+    </div> -->
+
+    <script>
+        const game_frame = document.querySelector('#game_frame');
+        const innerFrame = document.querySelector('.inner_frame');
+
+        var rotateXvalue = findTranslateValue(window.getComputedStyle(innerFrame).transform, 'rotateX');
+        var rotateYvalue = findTranslateValue(window.getComputedStyle(innerFrame).transform, 'rotateY');
+        var rotateZvalue = findTranslateValue(window.getComputedStyle(innerFrame).transform, 'rotateZ');
+        
+        var translateYvalue = findTranslateValue(window.getComputedStyle(innerFrame).transform, 'translateY');
+
+        rotateXvalue = _getTransform(innerFrame).rotateX;
+        rotateYvalue = _getTransform(innerFrame).rotateY;
+        rotateZvalue = _getTransform(innerFrame).rotateZ;
+
+        console.log({rotateXvalue, rotateYvalue, rotateZvalue, translateYvalue });
+
+        function handleMouseWheel(event) {
+            const deltaY = event.deltaY;
+            if (deltaY < 0) {
+                translateUp();
+            } else {
+                translateDown();
+            }
+        }
+
+        function findTranslateValue(transformString, target) {
+            if (target == 'rotateX') {
+                var translateRegex = /rotateX\(([^)]+)\)/;
+            }
+            if (target == 'translateY') {
+                var translateRegex = /translateY\(([^)]+)\)/;
+            }
+            if (target == 'rotateZ') {
+                var translateRegex = /rotateZ\(([^)]+)\)/;
+            }
+            var match = transformString.match(translateRegex);
+            if (match && match.length > 1) {
+                var vlaue = parseFloat(match[1]);
+                return vlaue;
+            } else {
+                return 0;
+            }
+        }
+
+        // Function to increase translateY
+        function translateUp() {
+            innerFrame.style.transform = `rotateX(${rotateXvalue}deg) rotateY(358deg) rotateZ(${rotateZvalue}deg) translateY(${translateYvalue += 10}px) translateZ(-5px) `;
+        }
+
+        // Function to decrease translateY
+        function translateDown() {
+            innerFrame.style.transform = `rotateX(${rotateXvalue}deg) rotateY(358deg) rotateZ(${rotateZvalue}deg) translateY(${translateYvalue -= 10}px) translateZ(-5px) `;
+        }
+
+        var initialX = 0;
+        var initialY = 0;
+        let isDragging = false;
+        function handleDragStart(event) {
+            isDragging = true;
+            initialX = event.clientX;
+            initialY = event.clientY;
+            console.log("start",isDragging)
+        }
+        function handleDragEnd() {
+            isDragging = false;
+            console.log("end",isDragging)
+        }
+        function handleDragMove(event) {
+            if (isDragging){
+                const deltaX = event.clientX;
+                rotateZ(deltaX);
+            }else{
+                const deltaY = event.clientY;
+                //rotateX(deltaY);
+            }
+        }
+
+        function rotateZ(deltaX) {
+            
+            if (deltaX > initialX) {
+                innerFrame.style.transform = `rotateX(${rotateXvalue}deg) rotateY(358deg) rotateZ(${rotateZvalue -= 1}deg) translateY(${translateYvalue}px) translateZ(-15px) `;
+            } else {
+                innerFrame.style.transform = `rotateX(${rotateXvalue}deg) rotateY(358deg) rotateZ(${rotateZvalue += 1}deg) translateY(${translateYvalue}px) translateZ(-15px) `;
+            }
+            initialX = deltaX;
+        }
+        function rotateX(deltaY) {
+            if (deltaY > initialY) {
+                innerFrame.style.transform = `rotateX(${rotateXvalue -= .05}deg) rotateY(358deg) rotateZ(${rotateZvalue}deg) translateY(${translateYvalue}px) translateZ(-15px)`;
+            } else {
+                innerFrame.style.transform = `rotateX(${rotateXvalue += .05}deg) rotateY(358deg) rotateZ(${rotateZvalue}deg) translateY(${translateYvalue}px) translateZ(-15px)`;
+            }
+            initialY = deltaY;
+        }
+
+        function _getTransform(element) {
+
+            var matrix = window.getComputedStyle(element).transform,
+                rotateX = 0,
+                rotateY = 0,
+                rotateZ = 0;
+        
+            if (matrix !== 'none') {
+        
+                // do some magic
+                var values = matrix.split('(')[1].split(')')[0].split(','),
+                    pi = Math.PI,
+                    sinB = parseFloat(values[8]),
+
+                    b = Math.round(Math.asin(sinB) * 180 / pi),
+                    cosB = Math.cos(b * pi / 180),
+                    matrixVal10 = parseFloat(values[9]),
+
+                    a = Math.round(Math.asin(-matrixVal10 / cosB) * 180 / pi),
+                    matrixVal1 = parseFloat(values[0]),
+
+                    c = Math.round(Math.acos(matrixVal1 / cosB) * 180 / pi);
+        
+                rotateX = a;
+                rotateY = b;
+                rotateZ = c;
+        
+            }
+        
+            return {
+                rotateX: rotateX,
+                rotateY: rotateY,
+                rotateZ: rotateZ
+            };
+        
+        }
+        // Add event listener for mouse wheel when hovering over the inner frame
+        game_frame.addEventListener('wheel', handleMouseWheel);
+
+        game_frame.addEventListener('mousedown', handleDragStart);
+        game_frame.addEventListener('mouseup', handleDragEnd);
+        game_frame.addEventListener('mousemove', handleDragMove);
+    </script>
 </body>
 
 </html>

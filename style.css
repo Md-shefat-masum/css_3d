@@ -1,19 +1,31 @@
+html,body{
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+}
 .frame{
     position: relative;
-    perspective: 1000px;
-    height: 200px;
-    width: 200px;
+    perspective: 700px;
+    height: 100vh;
+    width: 100vw;
     border: 1px solid gray;
-    margin: 5px;
     padding: 20px;
 }
 
 .inner_frame{
     transform-style: preserve-3d;
     border: 1px solid red;
-    height: 100%;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    height: 400px;
+    width: 400px;
     /* animation: sideRotate 2s linear infinite; */
-    transform: rotateX(76deg) rotateY(358deg) translateY(43px) translateZ(-5px) rotateZ(1deg);
+    transform: rotateX(76deg) rotateY(358deg) rotateZ(1deg) translateY(43px) translateZ(-5px) ;
+    transform-origin: center;
 }
 .obj1{
     position: absolute;
