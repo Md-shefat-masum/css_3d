@@ -1,0 +1,150 @@
+.frame{
+    position: relative;
+    perspective: 1000px;
+    height: 200px;
+    width: 200px;
+    border: 1px solid gray;
+    margin: 5px;
+    padding: 20px;
+}
+
+.inner_frame{
+    transform-style: preserve-3d;
+    border: 1px solid red;
+    height: 100%;
+    /* animation: sideRotate 2s linear infinite; */
+    transform: rotateX(76deg) rotateY(358deg) translateY(43px) translateZ(-5px) rotateZ(1deg);
+}
+.obj1{
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    background-color: skyblue;
+    top: 8px;
+    left: -10px;
+    transform-style: preserve-3d;
+    transform: rotateX(274deg) rotateY(306deg) translateZ(-10px) rotateZ(1deg);
+    box-shadow: 0px 0px 0px 3px red;
+}
+
+.obj2{
+    transform: rotateX(278deg) rotateY(37deg) translateZ(-4px);
+    left: 35px;
+}
+
+.obj3{
+    transform: rotateX(269deg) translateZ(-9px);
+    left: 73px;
+}
+
+.obj4{
+    transform: rotateX(268deg) rotateY(-45deg) translateZ(11px);
+    left: 118px;
+}
+
+.text{
+    text-align: center;
+    margin: 0;
+}
+
+@keyframes sideRotate {
+    to{
+        transform: rotateX(69deg) rotateY(358deg) translateY(43px) translateZ(6px) rotateZ(0deg);
+    }
+    from{
+        transform: rotateX(69deg) rotateY(358deg) translateY(43px) translateZ(6px) rotateZ(360deg);
+    }
+}
+
+.tv{
+    perspective: 1000px;
+    position: relative;
+    /* border: 1px solid black; */
+    height: 200px;
+    width: 200px;
+    margin: 100px;
+    background-size: cover;
+    padding: 20px;
+}
+
+.player_card{
+    /* border: 1px solid rgb(148, 46, 46); */
+    transform-style: preserve-3d;
+    transform-origin: center;
+    transform: rotateX(80deg);
+    position: absolute;
+    top: 48px;
+    height: calc(100% + 50px);
+    width: calc(100% - 41px);
+}
+
+.field{
+    position: absolute;
+    transform-style: preserve-3d;
+    transform: rotateX(-81deg);
+    top: -740px;
+    left: -100px;
+    overflow: hidden;
+    width: 393px;
+    transition: .3s;
+}
+.field img{
+    height: 537px;
+    width: 797px;
+}
+.player{
+    height: 196px;
+    width: 195px;
+    /* border: 1px solid black; */
+    transform-style: preserve-3d;
+    transform-origin: center;
+    transition: .3s;
+    transform: rotateX(-80deg) translateZ(-526px) translateX(45px);
+}
+
+
+img{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.ball{
+    height: 38px;
+    top: 45px;
+    width: 38px;
+    position: absolute;
+    /* border: 1px solid black; */
+    border-radius: 50%;
+    /* border: 1px solid black; */
+    transform-style: preserve-3d;
+    transform-origin: center;
+    transform: rotateX(-80deg) translateZ(-526px) translateX(45px) translateY(-27px);
+    transition: .3s;
+}
+
+.tv:hover .field{
+    transform: rotateX(-81deg) rotateY(-47deg) translateY(81px);
+    top: -983px;
+}
+.tv:hover .player{
+    transform: rotateX(-83deg) translateZ(-12px) translateX(-69px) translateY(-55px);
+}
+.tv:hover .ball{
+    transform: rotateX(-83deg) translateZ(-417px) translateX(-220px) translateY(-97px);
+}
+
+.tv:hover .ball img{
+    animation: rotate_ball .5s linear infinite;
+}
+
+@keyframes rotate_ball {
+    to{
+        transform: rotate(0deg);
+        filter: blur(1px);
+    }
+    from{
+        transform: rotate(360deg);
+        filter: blur(3px);
+    }
+}
